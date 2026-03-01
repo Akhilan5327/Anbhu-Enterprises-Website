@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anbhu Enterprises | Digital Service Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F7F5F0;
+      --bg-alt:    #EEEAE1;
+      --surface:   #FFFFFF;
+      --navy:      #1B2A4A;
+      --navy-2:    #253660;
+      --green:     #4A7C59;
+      --green-lt:  #C8DEC9;
+      --green-pale:#EDF4EE;
+      --gold:      #B8923A;
+      --gold-lt:   #F5E6C8;
+      --text-1:    #1B2A4A;
+      --text-2:    #4A5568;
+      --text-3:    #8A96A8;
+      --border:    #DDD9D0;
+      --r-sm:  10px;
+      --r-md:  18px;
+      --r-lg:  28px;
+      --r-xl:  40px;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text-1);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .serif { font-family: 'Instrument Serif', serif; }
+
+    /* ─── NAV ─── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 0 clamp(1.25rem,4vw,3rem);
+      transition: background .3s, box-shadow .3s;
+    }
+    #nav.stuck {
+      background: rgba(247,245,240,.92);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .nav-inner {
+      max-width: 1300px; margin: 0 auto;
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-grid {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: var(--navy); padding: 6px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+    }
+    .logo-grid span { border-radius: 2px; display: block; }
+    .logo-grid span:nth-child(1){background:#60a5fa;}
+    .logo-grid span:nth-child(2){background:#a7f3d0;}
+    .logo-grid span:nth-child(3){background:#34d399;}
+    .logo-grid span:nth-child(4){background:#fbbf24;}
+    .logo-name { font-family:'Instrument Serif',serif; font-size:1.3rem; color:var(--navy); line-height:1; }
+    .logo-tagline { font-size:.62rem; font-weight:600; color:var(--text-3); letter-spacing:.07em; text-transform:uppercase; }
+
+    .nav-links { display:flex; align-items:center; gap:.2rem; list-style:none; }
+    .nav-links a {
+      text-decoration:none; font-size:.875rem; font-weight:500; color:var(--text-2);
+      padding:.5rem .95rem; border-radius:100px; transition: all .2s;
+    }
+    .nav-links a:hover { color:var(--navy); background:var(--green-pale); }
+
+    .nav-right { display:flex; align-items:center; gap:.75rem; }
+    .btn-ghost {
+      font-size:.85rem; font-weight:600; color:var(--navy);
+      padding:.55rem 1.2rem; border-radius:100px; border:1.5px solid var(--border);
+      background:transparent; cursor:pointer; transition: all .2s; text-decoration:none; white-space:nowrap;
+    }
+    .btn-ghost:hover { border-color:var(--green); background:var(--green-pale); }
+    .btn-solid {
+      font-size:.85rem; font-weight:700; color:#fff;
+      padding:.6rem 1.4rem; border-radius:100px; border:none;
+      background:var(--navy); cursor:pointer; transition: all .2s; text-decoration:none; white-space:nowrap;
+      display:inline-flex; align-items:center; gap:.4rem;
+    }
+    .btn-solid:hover { background:var(--navy-2); transform:translateY(-1px); box-shadow:0 6px 20px rgba(27,42,74,.25); }
+
+    /* hamburger */
+    .hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; }
+    .hamburger span { width:22px; height:2px; background:var(--navy); border-radius:2px; display:block; transition: all .3s; }
+
+    .mobile-drawer {
+      display:none; position:fixed; top:68px; left:0; right:0; z-index:199;
+      background:var(--bg); border-bottom:1px solid var(--border);
+      padding:1rem clamp(1.25rem,4vw,3rem) 1.5rem;
+      flex-direction:column; gap:.5rem; box-shadow:0 8px 32px rgba(27,42,74,.08);
+    }
+    .mobile-drawer.open { display:flex; }
+    .mobile-drawer a {
+      text-decoration:none; font-size:1rem; font-weight:500; color:var(--text-2);
+      padding:.75rem 1rem; border-radius:var(--r-sm); transition: all .2s;
+    }
+    .mobile-drawer a:hover { color:var(--navy); background:var(--green-pale); }
+    .mobile-divider { height:1px; background:var(--border); margin:.5rem 0; }
+    .mobile-cta { display:flex; gap:.75rem; flex-wrap:wrap; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100svh;
+      padding: 0 clamp(1.25rem,4vw,3rem);
+      display: flex; align-items: center; position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position:absolute; inset:0; z-index:0;
+      background:
+        radial-gradient(ellipse 75% 55% at 65% 35%, rgba(74,124,89,.13) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 15% 75%, rgba(184,146,58,.09) 0%, transparent 55%),
+        var(--bg-alt);
+    }
+    .hero-dots {
+      position:absolute; inset:0; z-index:0;
+      background-image: radial-gradient(circle, var(--border) 1.2px, transparent 1.2px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+      opacity:.6;
+    }
+    .hero-inner {
+      position:relative; z-index:1;
+      max-width:1300px; margin:0 auto; width:100%;
+      display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;
+      padding-top:80px;
+    }
+
+    .hero-pill {
+      display:inline-flex; align-items:center; gap:.5rem;
+      background:var(--surface); border:1px solid var(--border); border-radius:100px;
+      padding:.35rem .9rem .35rem .45rem;
+      font-size:.72rem; font-weight:600; color:var(--text-2);
+      margin-bottom:1.75rem; box-shadow:0 2px 8px rgba(27,42,74,.06);
+    }
+    .pill-dot {
+      width:20px; height:20px; border-radius:50%; background:var(--green-pale);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .pill-dot::after { content:''; width:7px; height:7px; border-radius:50%; background:var(--green); display:block; }
+
+    .hero-h1 {
+      font-family:'Instrument Serif',serif;
+      font-size:clamp(2.6rem,5.5vw,5rem);
+      line-height:1.05; color:var(--navy); letter-spacing:-.02em;
+      margin-bottom:1.25rem;
+    }
+    .hero-h1 em { font-style:italic; color:var(--green); }
+
+    .hero-sub {
+      font-size:1.05rem; line-height:1.72; color:var(--text-2);
+      max-width:420px; margin-bottom:2.25rem;
+    }
+
+    .hero-btns { display:flex; align-items:center; gap:.875rem; flex-wrap:wrap; }
+    .btn-hero {
+      font-size:.95rem; font-weight:700; color:#fff;
+      padding:.85rem 2rem; border-radius:100px; border:none;
+      background:var(--navy); cursor:pointer; transition:all .25s;
+      display:inline-flex; align-items:center; gap:.5rem;
+      box-shadow:0 4px 18px rgba(27,42,74,.28); text-decoration:none;
+    }
+    .btn-hero:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(27,42,74,.32); }
+    .btn-hero-out {
+      font-size:.95rem; font-weight:600; color:var(--navy);
+      padding:.85rem 2rem; border-radius:100px;
+      border:1.5px solid var(--border); background:var(--surface);
+      cursor:pointer; transition:all .25s; text-decoration:none;
+    }
+    .btn-hero-out:hover { border-color:var(--green); background:var(--green-pale); }
+
+    .hero-stats {
+      display:flex; align-items:center; gap:2rem;
+      margin-top:2.5rem; padding-top:2rem; border-top:1px solid var(--border);
+    }
+    .stat-n {
+      font-family:'Instrument Serif',serif;
+      font-size:2rem; color:var(--navy); line-height:1; letter-spacing:-.03em;
+    }
+    .stat-l { font-size:.72rem; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:.08em; margin-top:.2rem; }
+    .stat-div { width:1px; height:34px; background:var(--border); }
+
+    /* Hero visual */
+    .hero-visual { position:relative; }
+    .hero-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r-lg); box-shadow:0 24px 64px rgba(27,42,74,.12);
+      overflow:hidden; transform:rotate(1.5deg);
+      transition:transform .5s cubic-bezier(.22,.68,0,1.2);
+    }
+    .hero-card:hover { transform:rotate(0deg); }
+    .hcard-head {
+      background:var(--navy); padding:1.5rem 1.75rem;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .hcard-head h3 { font-family:'Instrument Serif',serif; font-size:1.1rem; color:#fff; }
+    .hcard-head span { font-size:.72rem; color:rgba(255,255,255,.4); font-weight:500; }
+    .hcard-body { padding:1.25rem; display:grid; grid-template-columns:1fr 1fr; gap:.625rem; }
+    .svc-chip {
+      background:var(--bg); border:1px solid var(--border); border-radius:var(--r-sm);
+      padding:.75rem .875rem; display:flex; align-items:center; gap:.6rem;
+      font-size:.78rem; font-weight:600; color:var(--navy); transition:all .2s;
+    }
+    .svc-chip:hover { background:var(--green-pale); border-color:var(--green-lt); }
+    .chip-ico {
+      width:26px; height:26px; border-radius:7px;
+      display:flex; align-items:center; justify-content:center; font-size:.8rem; flex-shrink:0;
+    }
+    .hcard-foot {
+      background:var(--bg-alt); border-top:1px solid var(--border);
+      padding:1rem 1.75rem; display:flex; align-items:center; justify-content:space-between;
+    }
+    .hcard-foot > span { font-size:.7rem; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:.08em; }
+    .verified {
+      display:inline-flex; align-items:center; gap:.35rem;
+      background:var(--green-pale); border:1px solid var(--green-lt);
+      border-radius:100px; padding:.28rem .75rem;
+      font-size:.68rem; font-weight:700; color:var(--green);
+    }
+
+    .float-tag {
+      position:absolute; background:var(--surface);
+      border:1px solid var(--border); border-radius:var(--r-md);
+      padding:.875rem 1.125rem; box-shadow:0 8px 28px rgba(27,42,74,.10);
+      display:flex; align-items:center; gap:.7rem;
+      animation: bob 4s ease-in-out infinite;
+    }
+    .float-tag:nth-child(3) { bottom:-1.75rem; left:-2.25rem; animation-delay:0s; }
+    .float-tag:nth-child(4) { top:1.5rem; right:-1.75rem; animation-delay:2.1s; }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+    .float-ico { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .float-tag p { font-size:.78rem; font-weight:700; color:var(--navy); }
+    .float-tag small { font-size:.68rem; color:var(--text-3); display:block; }
+
+    /* ─── MARQUEE STRIP ─── */
+    .marquee-strip { background:var(--navy); padding:.9rem 0; overflow:hidden; }
+    .marquee-track {
+      display:flex; gap:3rem; width:max-content;
+      animation: marquee 28s linear infinite;
+    }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .marquee-item {
+      display:flex; align-items:center; gap:.6rem; white-space:nowrap;
+      font-size:.72rem; font-weight:600; color:rgba(255,255,255,.5);
+      text-transform:uppercase; letter-spacing:.1em;
+    }
+    .marquee-dot { width:5px; height:5px; border-radius:50%; background:var(--green-lt); flex-shrink:0; }
+
+    /* ─── SECTION SHELL ─── */
+    .section { padding:clamp(4.5rem,9vw,7.5rem) clamp(1.25rem,4vw,3rem); }
+    .section-max { max-width:1300px; margin:0 auto; }
+    .tag {
+      display:inline-flex; align-items:center; gap:.5rem;
+      font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--green);
+      margin-bottom:1.1rem;
+    }
+    .tag::before { content:''; width:20px; height:2px; background:var(--green); border-radius:2px; }
+    .sh { font-family:'Instrument Serif',serif; font-size:clamp(1.9rem,4vw,3.2rem); line-height:1.1; color:var(--navy); letter-spacing:-.025em; margin-bottom:1rem; }
+    .sp { font-size:1.05rem; line-height:1.7; color:var(--text-2); max-width:500px; }
+
+    /* ─── SERVICES ─── */
+    #services { background:var(--bg); }
+    .svc-header { display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; margin-bottom:3rem; flex-wrap:wrap; }
+
+    .filter-pills { display:flex; gap:.4rem; background:var(--surface); padding:.35rem; border-radius:100px; border:1px solid var(--border); flex-wrap:wrap; }
+    .fp {
+      font-size:.78rem; font-weight:600; padding:.45rem 1rem; border-radius:100px;
+      border:none; background:transparent; color:var(--text-2); cursor:pointer; transition:all .18s; white-space:nowrap;
+    }
+    .fp.on { background:var(--navy); color:#fff; }
+    .fp:not(.on):hover { color:var(--navy); background:var(--bg-alt); }
+
+    .svc-grid { display:none; grid-template-columns:repeat(3,1fr); gap:.875rem; }
+    .svc-grid.show { display:grid; }
+    .svc-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md);
+      padding:1.375rem 1.5rem; display:flex; align-items:flex-start; gap:.875rem;
+      transition:all .25s; cursor:default;
+    }
+    .svc-card:hover { border-color:var(--green-lt); box-shadow:0 8px 28px rgba(27,42,74,.09); transform:translateY(-3px); }
+    .svc-card-ico {
+      width:42px; height:42px; border-radius:var(--r-sm); flex-shrink:0;
+      display:flex; align-items:center; justify-content:center; font-size:1.15rem;
+    }
+    .svc-card h4 { font-size:.88rem; font-weight:700; color:var(--navy); line-height:1.35; }
+    .svc-card p { font-size:.76rem; color:var(--text-3); margin-top:.2rem; line-height:1.5; }
+
+    .cert-row {
+      display:flex; flex-wrap:wrap; gap:.75rem; margin-top:3.5rem; padding-top:2.5rem;
+      border-top:1px solid var(--border);
+    }
+    .cert-badge {
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.45rem 1.1rem; border-radius:100px; border:1px solid var(--border);
+      background:var(--surface); font-size:.68rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:.09em; color:var(--text-3);
+      transition:all .2s;
+    }
+    .cert-badge:hover { border-color:var(--green-lt); background:var(--green-pale); color:var(--green); }
+    .cert-badge::before { content:'✓'; color:var(--green); font-weight:900; }
+
+    /* ─── HOW IT WORKS ─── */
+    #how { background:var(--bg-alt); }
+    .steps-row {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:3.5rem;
+    }
+    .step {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r-lg); padding:2.25rem 2rem;
+      position:relative; overflow:hidden; transition:all .3s;
+    }
+    .step:hover { box-shadow:0 12px 36px rgba(27,42,74,.1); transform:translateY(-4px); }
+    .step::after {
+      content: attr(data-n); position:absolute; bottom:-1.2rem; right:1.25rem;
+      font-family:'Instrument Serif',serif; font-size:7rem; line-height:1;
+      color:var(--bg-alt); pointer-events:none; font-style:italic;
+    }
+    .step-num { font-size:.68rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--green); margin-bottom:1.1rem; }
+    .step-icon {
+      width:52px; height:52px; background:var(--green-pale); border-radius:var(--r-sm);
+      display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:1.5rem;
+    }
+    .step h3 { font-family:'Instrument Serif',serif; font-size:1.35rem; color:var(--navy); margin-bottom:.6rem; }
+    .step p { font-size:.9rem; line-height:1.65; color:var(--text-2); }
+
+    /* ─── CONTACT ─── */
+    #contact { background:var(--bg); }
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:3.5rem; align-items:start; }
+
+    .contact-items { display:flex; flex-direction:column; gap:.875rem; margin-top:2rem; }
+    .c-item {
+      display:flex; align-items:center; gap:1.125rem;
+      padding:1.125rem 1.375rem; background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r-md); transition:all .2s;
+    }
+    .c-item:hover { border-color:var(--green-lt); box-shadow:0 4px 14px rgba(27,42,74,.07); }
+    .c-ico { width:42px; height:42px; border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+    .c-item h4 { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-3); margin-bottom:.2rem; }
+    .c-item p { font-size:.92rem; font-weight:600; color:var(--navy); }
+
+    .call-block {
+      margin-top:1.75rem; padding:1.75rem; background:var(--navy); border-radius:var(--r-lg);
+      display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+    }
+    .call-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.45); margin-bottom:.35rem; }
+    .call-num { font-family:'Instrument Serif',serif; font-size:1.5rem; color:#fff; letter-spacing:-.01em; }
+    .btn-call {
+      display:inline-flex; align-items:center; gap:.5rem;
+      background:#fff; color:var(--navy); font-weight:700; font-size:.88rem;
+      padding:.7rem 1.5rem; border-radius:100px; border:none; cursor:pointer;
+      transition:all .2s; text-decoration:none; white-space:nowrap;
+    }
+    .btn-call:hover { background:var(--green-pale); transform:translateY(-1px); }
+
+    /* Form */
+    .form-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r-lg); padding:2.25rem; box-shadow:0 12px 40px rgba(27,42,74,.09);
+    }
+    .form-card h3 { font-family:'Instrument Serif',serif; font-size:1.5rem; color:var(--navy); margin-bottom:.35rem; }
+    .form-card > p { font-size:.875rem; color:var(--text-2); margin-bottom:1.75rem; }
+    .form-row2 { display:grid; grid-template-columns:1fr 1fr; gap:.875rem; }
+    .fgrp { margin-bottom:1rem; }
+    .fgrp label { display:block; font-size:.78rem; font-weight:600; color:var(--text-2); margin-bottom:.4rem; }
+    .fgrp input, .fgrp select, .fgrp textarea {
+      width:100%; padding:.72rem 1rem; border:1.5px solid var(--border); border-radius:var(--r-sm);
+      font-family:'Outfit',sans-serif; font-size:.88rem; color:var(--navy);
+      background:var(--bg); outline:none; transition:all .2s;
+    }
+    .fgrp input:focus, .fgrp select:focus, .fgrp textarea:focus {
+      border-color:var(--green); background:var(--surface);
+      box-shadow:0 0 0 3px rgba(74,124,89,.11);
+    }
+    .fgrp textarea { resize:vertical; min-height:90px; }
+    .btn-send {
+      width:100%; margin-top:.5rem; padding:.875rem; background:var(--navy); color:#fff;
+      border:none; border-radius:100px; font-family:'Outfit',sans-serif;
+      font-size:.95rem; font-weight:700; cursor:pointer; transition:all .25s;
+    }
+    .btn-send:hover { background:var(--navy-2); transform:translateY(-1px); box-shadow:0 8px 22px rgba(27,42,74,.25); }
+
+    /* ─── LOCATION ─── */
+    #location { background:var(--bg-alt); }
+    .loc-grid { display:grid; grid-template-columns:1fr 1.5fr; gap:3rem; align-items:start; }
+    .loc-sticky { position:sticky; top:90px; }
+    .loc-details { display:flex; flex-direction:column; gap:.875rem; margin-top:2rem; }
+    .loc-item {
+      display:flex; gap:1rem; padding:1.125rem 1.25rem;
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md);
+    }
+    .loc-ico { width:38px; height:38px; background:var(--green-pale); border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:.95rem; flex-shrink:0; }
+    .loc-item h4 { font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-3); margin-bottom:.25rem; }
+    .loc-item p { font-size:.88rem; font-weight:600; color:var(--navy); line-height:1.55; }
+
+    .map-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; box-shadow:0 12px 40px rgba(27,42,74,.09); }
+    .map-vis {
+      height:420px; position:relative; overflow:hidden;
+      background:linear-gradient(160deg, #dceede 0%, #cde0d0 100%);
+    }
+    .map-vis::before {
+      content:''; position:absolute; inset:0;
+      background-image: linear-gradient(rgba(74,124,89,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(74,124,89,.12) 1px, transparent 1px);
+      background-size:36px 36px;
+    }
+    /* road lines */
+    .map-vis::after {
+      content:''; position:absolute; inset:0;
+      background:
+        linear-gradient(to right, transparent 49%, rgba(255,255,255,.7) 49%, rgba(255,255,255,.7) 51%, transparent 51%),
+        linear-gradient(to bottom, transparent 39%, rgba(255,255,255,.7) 39%, rgba(255,255,255,.7) 41%, transparent 41%),
+        linear-gradient(to bottom, transparent 69%, rgba(255,255,255,.5) 69%, rgba(255,255,255,.5) 71%, transparent 71%);
+    }
+    .map-pin {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-60%);
+      z-index:5; display:flex; flex-direction:column; align-items:center;
+      animation: pin-bob 2.5s ease-in-out infinite;
+    }
+    @keyframes pin-bob { 0%,100%{transform:translate(-50%,-60%)} 50%{transform:translate(-50%,-68%)} }
+    .pin-body {
+      width:52px; height:52px; border-radius:50% 50% 50% 50% / 50% 50% 100% 100%;
+      background:var(--navy); display:flex; align-items:center; justify-content:center;
+      font-size:1.4rem; transform:rotate(45deg);
+      box-shadow:0 8px 24px rgba(27,42,74,.35);
+    }
+    .pin-body span { transform:rotate(-45deg); display:block; }
+    .pin-shadow { width:18px; height:5px; background:rgba(0,0,0,.18); border-radius:50%; margin-top:3px; filter:blur(3px); }
+    .map-chip {
+      position:absolute; background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r-sm); padding:.65rem 1.125rem;
+      font-size:.8rem; font-weight:700; color:var(--navy);
+      box-shadow:0 4px 14px rgba(27,42,74,.1); z-index:6;
+    }
+    .map-chip.tl { top:1.25rem; left:1.25rem; }
+    .map-chip.br { bottom:1.25rem; right:1.25rem; font-size:.7rem; color:var(--text-2); font-weight:600; }
+    .map-footer {
+      padding:1.125rem 1.5rem; display:flex; align-items:center; justify-content:space-between;
+      border-top:1px solid var(--border); flex-wrap:wrap; gap:.75rem;
+    }
+    .map-footer span { font-size:.78rem; color:var(--text-3); }
+    .btn-dir {
+      display:inline-flex; align-items:center; gap:.4rem;
+      font-size:.82rem; font-weight:700; color:var(--navy); text-decoration:none;
+      padding:.5rem 1.125rem; border-radius:100px;
+      background:var(--green-pale); border:1px solid var(--green-lt); transition:all .2s;
+    }
+    .btn-dir:hover { background:var(--green-lt); transform:translateY(-1px); }
+
+    /* ─── TRUST / TESTIMONIALS ─── */
+    #trust { background:var(--navy); padding:clamp(4.5rem,9vw,7.5rem) clamp(1.25rem,4vw,3rem); }
+    #trust .tag { color:var(--green-lt); }
+    #trust .tag::before { background:var(--green-lt); }
+    #trust .sh { color:#fff; }
+    #trust .sp { color:rgba(255,255,255,.55); }
+
+    .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:3.5rem; }
+    .testi-card {
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09);
+      border-radius:var(--r-lg); padding:1.875rem; transition:all .3s;
+    }
+    .testi-card:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18); transform:translateY(-4px); }
+    .stars { display:flex; gap:.2rem; margin-bottom:1.1rem; }
+    .star { color:var(--gold); font-size:.8rem; }
+    .testi-card blockquote { font-size:.9rem; line-height:1.72; color:rgba(255,255,255,.7); margin-bottom:1.5rem; font-style:italic; }
+    .testi-author { display:flex; align-items:center; gap:.75rem; }
+    .ava { width:36px; height:36px; border-radius:50%; overflow:hidden; background:var(--green-pale); flex-shrink:0; }
+    .ava img { width:100%; height:100%; object-fit:cover; }
+    .ava-name { font-size:.82rem; font-weight:700; color:#fff; }
+    .ava-role { font-size:.7rem; color:rgba(255,255,255,.38); }
+
+    .trust-nums {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem;
+      margin-top:3.5rem; padding-top:3rem; border-top:1px solid rgba(255,255,255,.08);
+    }
+    .tnum { text-align:center; }
+    .tnum-n { font-family:'Instrument Serif',serif; font-size:2.4rem; color:#fff; letter-spacing:-.04em; }
+    .tnum-l { font-size:.75rem; color:rgba(255,255,255,.38); font-weight:500; margin-top:.3rem; }
+
+    /* ─── CTA ─── */
+    #cta { background:var(--bg); padding:clamp(4.5rem,9vw,7.5rem) clamp(1.25rem,4vw,3rem); }
+    .cta-card {
+      max-width:1300px; margin:0 auto;
+      background:var(--navy); border-radius:var(--r-xl);
+      padding:clamp(2.75rem,5vw,4.5rem);
+      display:grid; grid-template-columns:1fr auto; gap:4rem; align-items:center;
+      position:relative; overflow:hidden;
+    }
+    .cta-card::before {
+      content:''; position:absolute; top:-50%; right:-5%; width:55%; height:220%;
+      background:radial-gradient(ellipse, rgba(74,124,89,.12) 0%, transparent 65%);
+      pointer-events:none;
+    }
+    .cta-card .tag { color:var(--green-lt); }
+    .cta-card .tag::before { background:var(--green-lt); }
+    .cta-card .sh { color:#fff; margin-bottom:.75rem; }
+    .cta-card .sp { color:rgba(255,255,255,.55); }
+    .cta-btns { display:flex; flex-direction:column; gap:.75rem; align-items:stretch; flex-shrink:0; }
+    .btn-cta-w {
+      padding:.95rem 2.25rem; background:#fff; color:var(--navy);
+      border:none; border-radius:100px; font-family:'Outfit',sans-serif;
+      font-size:.95rem; font-weight:800; cursor:pointer; transition:all .25s; white-space:nowrap; text-align:center; text-decoration:none; display:block;
+    }
+    .btn-cta-w:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(0,0,0,.22); }
+    .btn-cta-o {
+      padding:.95rem 2.25rem; background:transparent; color:#fff;
+      border:1.5px solid rgba(255,255,255,.22); border-radius:100px;
+      font-family:'Outfit',sans-serif; font-size:.95rem; font-weight:600;
+      cursor:pointer; transition:all .25s; white-space:nowrap; text-align:center; text-decoration:none; display:block;
+    }
+    .btn-cta-o:hover { border-color:rgba(255,255,255,.55); background:rgba(255,255,255,.06); }
+
+    /* ─── FOOTER ─── */
+    footer { background:var(--navy); padding:clamp(3rem,6vw,5rem) clamp(1.25rem,4vw,3rem) 2rem; }
+    .foot-top {
+      max-width:1300px; margin:0 auto;
+      display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:3.5rem;
+      padding-bottom:3rem; border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .foot-brand p { font-size:.875rem; line-height:1.7; color:rgba(255,255,255,.4); margin-top:1.1rem; max-width:240px; }
+    .foot-brand .logo-name { color:#fff; }
+    .foot-tags { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:1.5rem; }
+    .foot-tag {
+      font-size:.62rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
+      color:rgba(255,255,255,.38); padding:.28rem .75rem;
+      border:1px solid rgba(255,255,255,.09); border-radius:100px;
+    }
+    .foot-col h5 { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.38); margin-bottom:1.1rem; }
+    .foot-col ul { list-style:none; display:flex; flex-direction:column; gap:.65rem; }
+    .foot-col ul li a { text-decoration:none; font-size:.875rem; color:rgba(255,255,255,.55); transition:color .2s; }
+    .foot-col ul li a:hover { color:#fff; }
+    .foot-bottom {
+      max-width:1300px; margin:0 auto;
+      display:flex; align-items:center; justify-content:space-between;
+      padding-top:1.75rem; gap:1.5rem; flex-wrap:wrap;
+    }
+    .foot-bottom p { font-size:.75rem; color:rgba(255,255,255,.22); }
+    .foot-links { display:flex; gap:1.5rem; }
+    .foot-links a { font-size:.75rem; color:rgba(255,255,255,.22); text-decoration:none; transition:color .2s; }
+    .foot-links a:hover { color:rgba(255,255,255,.65); }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
+    .reveal.in { opacity:1; transform:none; }
+    .d1{transition-delay:.08s} .d2{transition-delay:.16s} .d3{transition-delay:.24s} .d4{transition-delay:.32s}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:1024px){
+      .hero-inner{grid-template-columns:1fr;gap:2.5rem;}
+      .hero-visual{max-width:500px;margin:0 auto;}
+      .contact-grid{grid-template-columns:1fr;gap:2.5rem;}
+      .loc-grid{grid-template-columns:1fr;}
+      .loc-sticky{position:static;}
+      .cta-card{grid-template-columns:1fr;gap:2rem;}
+      .cta-btns{flex-direction:row;}
+      .foot-top{grid-template-columns:1fr 1fr;gap:2rem;}
+      .testi-grid{grid-template-columns:1fr 1fr;}
+      .trust-nums{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:768px){
+      .nav-links,.nav-right{display:none;}
+      .hamburger{display:flex;}
+      .steps-row{grid-template-columns:1fr;}
+      .svc-grid{grid-template-columns:1fr 1fr;}
+      .form-row2{grid-template-columns:1fr;}
+      .foot-top{grid-template-columns:1fr;}
+      .testi-grid{grid-template-columns:1fr;}
+      .cta-btns{flex-direction:column;}
+    }
+    @media(max-width:520px){
+      .svc-grid{grid-template-columns:1fr;}
+      .hero-stats{flex-direction:column;gap:1.1rem;}
+      .stat-div{display:none;}
+      .float-tag{display:none;}
+      .trust-nums{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img 
+        src="https://img.sanishtech.com/u/d619414e563fbfa6054215322b767fd3.jpg" 
+        alt="Anbhu Enterprises Logo" 
+        width="40" 
+        height="40" 
+        style="border-radius:8px; object-fit:contain;"
+      />
+      <div>
+        <div class="logo-name">Anbhu</div>
+        <div class="logo-tagline">Enterprises</div>
+      </div>
+    </a>
+
+    <div class="nav-right">
+      <a href="#location" class="btn-ghost"> Location</a>
+      <a href="#services" class="btn-ghost"> Services</a>
+      <a href="#contact" class="btn-solid">Contact Us →</a>
+    </div>
+
+    <button class="hamburger" id="ham" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-drawer" id="drawer">
+  <a href="#services" onclick="closeDrawer()">Services</a>
+  <a href="#how" onclick="closeDrawer()">How It Works</a>
+  <a href="#location" onclick="closeDrawer()">Location</a>
+  <a href="#contact" onclick="closeDrawer()">Contact</a>
+  <div class="mobile-divider"></div>
+  <div class="mobile-cta">
+    <a href="tel:+919876543210" class="btn-ghost" style="flex:1;text-align:center;">📞 Call</a>
+    <a href="#contact" class="btn-solid" style="flex:1;text-align:center;" onclick="closeDrawer()">Contact Us →</a>
+  </div>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+
+  <div class="hero-inner">
+    <!-- Left -->
+    <div>
+      <div class="hero-pill reveal">
+        <div class="pill-dot"></div>
+        Est. 2016 · CSC Government Authorized Center
+      </div>
+      <h1 class="hero-h1 reveal d1">
+        Your <em>trusted</em><br>digital services<br>partner.
+      </h1>
+      <p class="hero-sub reveal d2">
+        From government document processing and banking services to printing and travel bookings — everything under one roof in Tamil Nadu.
+      </p>
+      <div class="hero-btns reveal d3">
+        <a href="#services" class="btn-hero">Explore Services →</a>
+        <a href="#contact" class="btn-hero-out">Contact Us</a>
+      </div>
+      <div class="hero-stats reveal d4">
+        <div>
+          <div class="stat-n">10+</div>
+          <div class="stat-l">Years Active</div>
+        </div>
+        <div class="stat-div"></div>
+        <div>
+          <div class="stat-n">50+</div>
+          <div class="stat-l">Services</div>
+        </div>
+        <div class="stat-div"></div>
+        <div>
+          <div class="stat-n">1000+</div>
+          <div class="stat-l">Happy Customers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right visual -->
+    <div class="hero-visual reveal d2">
+      <div class="hero-card">
+        <div class="hcard-head">
+          <h3>Our Services</h3>
+          <span>Digital Hub ✦</span>
+        </div>
+        <div class="hcard-body">
+          <div class="svc-chip"><div class="chip-ico" style="background:#EEF4FF">🖨️</div>Xerox & Print</div>
+          <div class="svc-chip"><div class="chip-ico" style="background:#EDFFF5">💳</div>PAN Card</div>
+          <div class="svc-chip"><div class="chip-ico" style="background:#FFFBEE">🏛️</div>GST Filing</div>
+          <div class="svc-chip"><div class="chip-ico" style="background:#FFF0F0">✈️</div>Travel Booking</div>
+          <div class="svc-chip"><div class="chip-ico" style="background:#F3F0FF">🏦</div>AePS Banking</div>
+          <div class="svc-chip"><div class="chip-ico" style="background:#EDFFF5">🛡️</div>Insurance</div>
+          <div class="svc-chip"><div class="chip-ico" style="background:#FFFBEE">📄</div>ITR Filing</div>
+          <div class="svc-chip"><div class="chip-ico" style="background:#EEF4FF">🚆</div>IRCTC Booking</div>
+        </div>
+        <div class="hcard-foot">
+          <span>CSC Authorized</span>
+          <div class="verified">✓ Verified Center</div>
+        </div>
+      </div>
+      <div class="float-tag">
+        <div class="float-ico" style="background:#EDFFF5">📋</div>
+        <div><p>Document Ready</p><small>Processing complete</small></div>
+      </div>
+      <div class="float-tag">
+        <div class="float-ico" style="background:#FFFBEE">⚡</div>
+        <div><p>Instant Service</p><small>Same-day delivery</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MARQUEE ═══════════ -->
+<div class="marquee-strip">
+  <div class="marquee-track" id="mtrack"></div>
+</div>
+
+<!-- ═══════════ SERVICES ═══════════ -->
+<section class="section" id="services">
+  <div class="section-max">
+    <div class="svc-header">
+      <div>
+        <div class="tag reveal">What We Offer</div>
+        <h2 class="sh reveal d1">All services, one place.</h2>
+        <p class="sp reveal d2">Trusted by thousands across Tamil Nadu for fast, verified, and hassle-free digital services.</p>
+      </div>
+      <div class="filter-pills reveal">
+        <button class="fp on" onclick="showTab(this,'print')">Printing & Docs</button>
+        <button class="fp" onclick="showTab(this,'bank')">Banking</button>
+        <button class="fp" onclick="showTab(this,'govt')">Govt & E-Sevai</button>
+        <button class="fp" onclick="showTab(this,'travel')">Travel & Insurance</button>
+      </div>
+    </div>
+
+    <!-- Printing -->
+    <div class="svc-grid show" data-tab="print">
+      <div class="svc-card reveal"><div class="svc-card-ico" style="background:#EEF4FF">🖨️</div><div><h4>Xerox / Photocopy</h4><p>B/W & Colour copying</p></div></div>
+      <div class="svc-card reveal d1"><div class="svc-card-ico" style="background:#EDFFF5">🔍</div><div><h4>Scanning & Lamination</h4><p>High-quality document scanning</p></div></div>
+      <div class="svc-card reveal d2"><div class="svc-card-ico" style="background:#FFFBEE">📚</div><div><h4>Spiral & Soft Binding</h4><p>Professional book binding</p></div></div>
+      <div class="svc-card reveal d3"><div class="svc-card-ico" style="background:#FFF0F0">🪪</div><div><h4>PVC Card Printing</h4><p>ID cards, visiting cards</p></div></div>
+      <div class="svc-card reveal"><div class="svc-card-ico" style="background:#F3F0FF">⌨️</div><div><h4>Typing (English & Tamil)</h4><p>Fast and accurate typing</p></div></div>
+      <div class="svc-card reveal d1"><div class="svc-card-ico" style="background:#EDFFF5">📝</div><div><h4>Rental Agreement Printing</h4><p>Legal document printing</p></div></div>
+    </div>
+
+    <!-- Banking -->
+    <div class="svc-grid" data-tab="bank">
+      <div class="svc-card reveal"><div class="svc-card-ico" style="background:#EDFFF5">💸</div><div><h4>Domestic Money Transfer</h4><p>Fast, secure transfers</p></div></div>
+      <div class="svc-card reveal d1"><div class="svc-card-ico" style="background:#EEF4FF"><img src="https://img.sanishtech.com/u/5c6728cb90fb5d6269f2d93cdf197395.png" alt="Aadhaar Card" width="25" height="25" style="object-fit:contain;"></div><div><h4>Aadhaar Card (New & Correction)</h4><p>Official Aadhaar card services</p></div></div>
+      <div class="svc-card reveal d2"><div class="svc-card-ico" style="background:#FFFBEE">💳</div><div><h4>Micro ATM Services</h4><p>On-the-spot banking</p></div></div>
+      <div class="svc-card reveal d3"><div class="svc-card-ico" style="background:#FFF0F0">📱</div><div><h4>UPI & Online Payment</h4><p>Assistance & guidance</p></div></div>
+      <div class="svc-card reveal"><div class="svc-card-ico" style="background:#F3F0FF">🪪</div><div><h4>PAN Card (New & Correction)</h4><p>Official PAN card services</p></div></div>
+      <div class="svc-card reveal d1"><div class="svc-card-ico" style="background:#EDFFF5">🔒</div><div><h4>Smart Card Services</h4><p>Government smart cards</p></div></div>
+    </div>
+
+    <!-- Govt -->
+    <div class="svc-grid" data-tab="govt">
+      <div class="svc-card reveal"><div class="svc-card-ico" style="background:#FFFBEE">📊</div><div><h4>GST Registration & Filing</h4><p>Complete GST solutions</p></div></div>
+      <div class="svc-card reveal d1"><div class="svc-card-ico" style="background:#EDFFF5">📋</div><div><h4>Income Tax Return (ITR)</h4><p>Hassle-free ITR filing</p></div></div>
+      <div class="svc-card reveal d2"><div class="svc-card-ico" style="background:#EEF4FF">👷</div><div><h4>EPF Claims & Passbook</h4><p>PF withdrawal & statements</p></div></div>
+      <div class="svc-card reveal d3"><div class="svc-card-ico" style="background:#FFF0F0">📄</div><div><h4>Employment Registration</h4><p>Job seeker registration</p></div></div>
+      <div class="svc-card reveal"><div class="svc-card-ico" style="background:#F3F0FF">🏡</div><div><h4>EC / Patta / Chitta</h4><p>Land records services</p></div></div>
+      <div class="svc-card reveal d1"><div class="svc-card-ico" style="background:#EDFFF5">🚗</div><div><h4>Driving License Applications</h4><p>New & renewal applications</p></div></div>
+    </div>
+
+    <!-- Travel -->
+    <div class="svc-grid" data-tab="travel">
+      <div class="svc-card reveal"><div class="svc-card-ico" style="background:#FFF0F0">🚗</div><div><h4>Vehicle Insurance</h4><p>Bike & car insurance</p></div></div>
+      <div class="svc-card reveal d1"><div class="svc-card-ico" style="background:#EDFFF5">❤️</div><div><h4>Health & Life Insurance</h4><p>Comprehensive coverage</p></div></div>
+      <div class="svc-card reveal d2"><div class="svc-card-ico" style="background:#EEF4FF">🚆</div><div><h4>Train (IRCTC) Booking</h4><p>Tatkal & regular tickets</p></div></div>
+      <div class="svc-card reveal d3"><div class="svc-card-ico" style="background:#FFFBEE">✈️</div><div><h4>Flight & Bus Ticket Booking</h4><p>All major carriers</p></div></div>
+      <div class="svc-card reveal"><div class="svc-card-ico" style="background:#F3F0FF">🚕</div><div><h4>Ola / Uber Assistance</h4><p>Cab booking help</p></div></div>
+      <div class="svc-card reveal d1"><div class="svc-card-ico" style="background:#EDFFF5">🏷️</div><div><h4>FASTag Registration</h4><p>Toll payment tags</p></div></div>
+    </div>
+
+    <!-- <div class="cert-row">
+      <span class="cert-badge reveal">Authorized CSC Center</span>
+      <span class="cert-badge reveal d1">E-Sevai Authorized</span>
+      <span class="cert-badge reveal d2">ISO 9001:2015</span> -->
+      <!-- <span class="cert-badge reveal d3">Digital India Partner</span>
+    </div> -->
+  </div>
+</section>
+
+<!-- ═══════════ HOW IT WORKS ═══════════ -->
+<section class="section" id="how">
+  <div class="section-max">
+    <div class="tag reveal">Process</div>
+    <h2 class="sh reveal d1">Three simple steps.</h2>
+    <p class="sp reveal d2">Government Digital services, solved the moment you need them.</p>
+    <div class="steps-row">
+      <div class="step reveal" data-n="1">
+        <div class="step-num">Step 01</div>
+        <div class="step-icon">🚶</div>
+        <h3>Visit or Connect</h3>
+        <p>Walk into our center or reach out digitally with your requirements.</p>
+      </div>
+      <div class="step reveal d1" data-n="2">
+        <div class="step-num">Step 02</div>
+        <div class="step-icon">⚡</div>
+        <h3>Instant Processing</h3>
+        <p>Our experts handle your applications or documents with verified precision.</p>
+      </div>
+      <div class="step reveal d2" data-n="3">
+        <div class="step-num">Step 03</div>
+        <div class="step-icon">✅</div>
+        <h3>Seamless Result</h3>
+        <p>Collect your prints or Complete your online digital application — done.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CONTACT ═══════════ -->
+<section class="section" id="contact">
+  <div class="section-max">
+    <div class="contact-grid">
+      <div>
+        <div class="tag reveal">Get in Touch</div>
+        <h2 class="sh reveal d1">Feel free<br>to call on.</h2>
+        <p class="sp reveal d2">Our support desk is open 24/7 for urgent document processing and verification queries.</p>
+
+        <div class="contact-items">
+          <div class="c-item reveal">
+            <div class="c-ico" style="background:#EDFFF5">📍</div>
+            <div>
+              <h4>Address</h4>
+              <p>5/63, Bajanai Koil St, Pallavaram, Chennai, Tamil Nadu 600043</p>
+            </div>
+          </div>
+          <div class="c-item reveal d1">
+            <div class="c-ico" style="background:#EEF4FF">✉️</div>
+            <div>
+              <h4>Email</h4>
+              <p>anbhudigitech@gmail.com</p>
+            </div>
+          </div>
+          <div class="c-item reveal d2">
+            <div class="c-ico" style="background:#FFFBEE">🕒</div>
+            <div>
+              <h4>Working Hours</h4>
+              <p>Mon–Sat: 9:00 AM – 8:00 PM</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="call-block reveal d3">
+          <div>
+            <div class="call-label">Call Us Directly</div>
+            <div class="call-num">+91 91763 69676</div>
+          </div>
+          <a href="tel:+919176369676" class="btn-call">📞 Call Now</a>
+        </div>
+      </div>
+
+      <div class="form-card reveal d1">
+        <h3>Send a Message</h3>
+        <p>We'll get back to you within the hour.</p>
+        <div class="form-row2">
+          <div class="fgrp"><label>First Name</label><input type="text" placeholder=""></div>
+          <div class="fgrp"><label>Last Name</label><input type="text" placeholder=""></div>
+        </div>
+        <div class="fgrp"><label>Phone Number</label><input type="tel" placeholder=""></div>
+        <div class="fgrp"><label>Service Required</label>
+          <select>
+            <option>Select a service…</option>
+            <option>Printing & Documents</option>
+            <option>Banking & Finance</option>
+            <option>Govt & E-Sevai</option>
+            <option>Travel & Insurance</option>
+          </select>
+        </div>
+        <div class="fgrp"><label>Message</label><textarea placeholder="Describe your requirement…"></textarea></div>
+        <button class="btn-send">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ LOCATION ═══════════ -->
+<section class="section" id="location">
+  <div class="section-max">
+    <div class="loc-grid">
+      <div class="loc-sticky">
+        <div class="tag reveal">Find Us</div>
+        <h2 class="sh reveal d1">We're right<br>around the corner.</h2>
+        <p class="sp reveal d2">Conveniently located in the heart of Tamil Nadu, easily accessible by road and public transport.</p>
+        <div class="loc-details">
+          <div class="loc-item reveal">
+            <div class="loc-ico">📍</div>
+            <div><h4>Address</h4><p>5/63, Bajanai Koil St, Pallavaram,<br>Chennai, Tamil Nadu 600043</p></div>
+          </div>
+          <div class="loc-item reveal d1">
+            <div class="loc-ico">🕒</div>
+            <div><h4>Hours</h4><p>Mon–Sat: 9 AM – 8 PM<br>Sunday: 10 AM – 2 PM</p></div>
+          </div>
+          <div class="loc-item reveal d2">
+            <div class="loc-ico">🚌</div>
+            <div><h4>Transport</h4><p>Bus stop 500m away<br></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card reveal d1">
+        <div class="map-vis">
+          <div class="map-chip tl">📍 Anbhu Enterprises</div>
+          <div class="map-pin">
+            <div class="pin-body"><span>🏢</span></div>
+            <div class="pin-shadow"></div>
+          </div>
+          <div class="map-chip br">Tamil Nadu, India</div>
+        </div>
+        <div class="map-footer">
+          <span>5/63, Bajanai Koil St, Pallavaram, Chennai, Tamil Nadu 600043</span>
+          <a href="https://maps.app.goo.gl/7BUY5d77st3fsJX48" target="_blank" class="btn-dir">🗺 Get Directions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TRUST / TESTIMONIALS ═══════════ -->
+<section id="trust">
+  <div class="section-max">
+    <div class="tag reveal">Testimonials</div>
+    <h2 class="sh reveal d1">Trusted by thousands.</h2>
+    <p class="sp reveal d2">See what our customers say about their experience with Anbhu Enterprises.</p>
+
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <blockquote>"I have tried many places to solve my aadhar issue but none of them worked until I found Anbhu Enterprises the issue has been solved in few days."</blockquote>
+        <div class="testi-author">
+          <div class="ava"><img src="https://picsum.photos/seed/user1/100/100" alt="Sarah"></div>
+          <div><div class="ava-name">Suresh</div><div class="ava-role">Customer</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d1">
+        <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <blockquote>"Finally, a service center that doesn't feel like a chore. It's sophisticated, fast, and the government document support is unbeatable."</blockquote>
+        <div class="testi-author">
+          <div class="ava"><img src="https://picsum.photos/seed/user2/100/100" alt="Markus"></div>
+          <div><div class="ava-name">Saravanan</div><div class="ava-role">Customer</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d2">
+        <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <blockquote>"The owner of this shop is so kind and addresses each and every digital solution that is required . Love this shop!"</blockquote>
+        <div class="testi-author">
+          <div class="ava"><img src="https://picsum.photos/seed/user3/100/100" alt="Elena"></div>
+          <div><div class="ava-name">Gopal</div><div class="ava-role">Customer</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-nums">
+      <div class="tnum reveal"><div class="tnum-n">10+</div><div class="tnum-l">Years of Service</div></div>
+      <div class="tnum reveal d1"><div class="tnum-n">50+</div><div class="tnum-l">Services Offered</div></div>
+      <!-- <div class="tnum reveal d2"><div class="tnum-n">99%</div><div class="tnum-l">Application Success</div></div> -->
+      <div class="tnum reveal d3"><div class="tnum-n">1000+</div><div class="tnum-l">Happy Customers</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section id="cta">
+  <div class="cta-card reveal">
+    <div>
+      <div class="tag">Ready to Start?</div>
+      <h2 class="sh">Expertise you<br>can rely on.</h2>
+      <p class="sp">Whether it's a single photocopy or complex GST filing, Anbhu Enterprises ensures precision and speed at the highest standard.</p>
+    </div>
+    <div class="cta-btns">
+      <a href="#location" class="btn-cta-w">Visit Our Center</a>
+      <a href="tel:+919876543210" class="btn-cta-o">📞 Call Us Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="foot-top">
+    <div class="foot-brand">
+      <a href="#" class="nav-logo">
+        <div class="logo-grid"><span></span><span></span><span></span><span></span></div>
+        <div>
+          <div class="logo-name">Anbhu</div>
+          <div class="logo-tagline" style="color:rgba(255,255,255,.3)">Enterprises</div>
+        </div>
+      </a>
+      <p>"Turning digital complexities into seamless realities since 2016."</p>
+      <div class="foot-tags">
+        <span class="foot-tag">CSC Authorized</span>
+        <!-- <span class="foot-tag">ISO 9001:2015</span> -->
+        <span class="foot-tag">E-Sevai</span>
+        <span class="foot-tag">Digital India</span>
+      </div>
+    </div>
+    <div class="foot-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#services">Printing & Docs</a></li>
+        <li><a href="#services">Banking & Finance</a></li>
+        <li><a href="#services">Govt & E-Sevai</a></li>
+        <li><a href="#services">Travel & Insurance</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Main Center</h5>
+      <ul>
+        <li><a href="#">5/63, Bajanai Koil St</a></li>
+        <li><a href="#">Pallavaram, Chennai</a></li>
+        <li><a href="#">Tamil Nadu 600043</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:support@anbhu.in">anbhudigitech@gmail.com</a></li>
+        <li><a href="tel:+919876543210">+91 91763 69676</a></li>
+        <!-- <li><a href="tel:+914423456789">+91 44 2345 6789</a></li> -->
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <p>© 2025 Anbhu Enterprises · Certified Service Center</p>
+    <div class="foot-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">CSC Disclosures</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* NAV scroll */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('stuck', window.scrollY > 40);
+  });
+
+  /* Hamburger */
+  const ham = document.getElementById('ham');
+  const drawer = document.getElementById('drawer');
+  ham.addEventListener('click', () => drawer.classList.toggle('open'));
+  function closeDrawer() { drawer.classList.remove('open'); }
+
+  /* Service tabs */
+  function showTab(btn, id) {
+    document.querySelectorAll('.fp').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    document.querySelectorAll('.svc-grid').forEach(g => g.classList.remove('show'));
+    document.querySelector(`.svc-grid[data-tab="${id}"]`).classList.add('show');
+    /* re-trigger reveals */
+    document.querySelectorAll('.svc-grid.show .reveal').forEach(el => {
+      el.classList.remove('in');
+      requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+    });
+  }
+
+  /* Marquee content */
+  const items = ['Authorized CSC Center','E-Sevai Services','Digital India Partner','Printing & Xerox','PAN & Aadhaar','GST & ITR Filing','Travel Bookings','Insurance Services','IRCTC Tickets'];
+  const track = document.getElementById('mtrack');
+  const html = items.map(t => `<span class="marquee-item"><span class="marquee-dot"></span>${t}</span>`).join('');
+  track.innerHTML = html + html; // duplicate for seamless loop
+
+  /* Scroll reveal */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
